@@ -8,63 +8,36 @@
  * @return {number[]}
  */
 var findAnagrams = function (s, p) {
-  //滑动窗口解法的关键是：窗口滑动的时机
-
-  //store 保存p中每个字符
   
-  function resetStore () { 
-    let store = new Map()
-    for (let item of p) {
-      if (store.has(item)) {
-        let value = store.get(item) + 1;
-        store.set(item, value);
-      } else {
-        store.set(item, 1);
-      }
-    }
-
-    return store
+  let store = new Array(26).fill(0) 
+  for (let item in p) { 
+    //将字符和store数组下标一一对应
+    let index = p.charCodeAt(item)-97
+    store[index]++ 
   }
-
-  let store = resetStore() 
-
-  //左右窗口边界，其初始值，设置初始窗口
-  let left = 0,
-    right = p.length - 1;
-  let result = [];
-
-  while (left < s.length) {
-    console.log(left,right,store);
-    for (let i = left; i <= right; i++) {
-      if (store.has(s[i])) {
-        let value = store.get(s[i]) - 1
-        store.set(s[i], value)
-      }
+  let window = new Array(26).fill(0);
+  let left = 0, right = p.length - 1;
+  let result = []
+  
+  while (right < s.length) {  
+    let i = left
+    while (i <= right) {
+      //将字符和window数组下标一一对应
+      let index = s.charCodeAt(i) - 97;
+      window[index]++;  
+      i++
     }
 
-    console.log(store);
-
-    let is = true;
-    store.forEach((value) => {
-      if (value !== 0) {
-        is = false
-      }
-    })
-
-    if (is) {
+    if (store.join('') === window.join('')) {
       result.push(left)
     }
-
-    store = resetStore(); 
-    right++;
-    left++;
  
-  }
+    window = new Array(26).fill(0);
+    left++
+    right++
+  } 
+  return result 
+}
 
-  return result;
-};
-
-let s = 'cbaebabacd',
-  p = 'abc';
-
-console.log(findAnagrams(s, p));
+let s = 'ababa', p = 'aba';
+console.log('结果：',findAnagrams(s, p));
