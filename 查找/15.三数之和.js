@@ -12,18 +12,12 @@ var threeSum = function (nums) {
   let result = []; 
 
   if (length < 3) return result
+
+  nums.sort((a, b) => { return a - b })
   
-  nums.sort((a, b) => {
-    return a-b
-  })
-
-  console.log(`nums:${nums}`);
-
   for (let [index, item] of nums.entries()) {
-    //当前的必须是负数，然后用大的来将就小的
 
     if (item > 0) return result
-
     //做外循环去重，[-4,-4,-2,-2,1,1,2,2,3,3]
     //即已经求过一次-4了，下一次出现-4，就不再求一遍了，直接从-2开始求
     if(item === nums[index - 1]) continue
@@ -54,10 +48,7 @@ var threeSum = function (nums) {
       } else {
         left++
       }
-      
     }
   }
-
   return result
-
 };
